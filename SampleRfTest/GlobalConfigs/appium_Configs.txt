@@ -1,0 +1,11 @@
+*** Settings ***
+Library           AppiumLibrary
+
+*** Variables ***
+${url}            http://localhost:4723/wd/hub
+&{capabilities}    platformName=Android    platformVersion=4.3    deviceName=device    app=${CURDIR}/Flipkart.apk    appPackage=com.flipkart.android    appActivity=com.flipkart.android.SplashActivity    noReset=true
+...               # Appium Server Desired Capabilities
+
+*** Keywords ***
+launchApp
+    Open Application    ${url}    alias=None    &{capabilities}

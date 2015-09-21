@@ -1,0 +1,5 @@
+*** Variables ***
+${login_id}       ${EMPTY}
+${login_button}    ${EMPTY}
+
+*** Keywords ***

@@ -1,0 +1,7 @@
+*** Settings ***
+Resource          ../DataProviders/excel_Handling.txt
+Library           Selenium2Library
+
+*** Test Cases ***
+excelTest
+    @{data}=    getExcelRowValues    loginDetails    yathi

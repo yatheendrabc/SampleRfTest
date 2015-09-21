@@ -1,0 +1,16 @@
+*** Settings ***
+Library           ExcelLibrary
+Library           Collections
+
+*** Keywords ***
+getExcelRowValues
+    [Arguments]    ${sheetName}    ${unique_value}
+    Open Excel    ${CURDIR}${/}TestData.xls
+    ${row_count}=    Get Row Count    ${sheetName}
+    : FOR    ${i}    IN RANGE    1    ${row_count}
+    \    ${value}=    Read Cell Data By Coordinates    ${sheetName}    0    ${i}
+    \    @{data}=    Get Row Values    ${sheetName}    ${i}    ${False}
+    [Return]    @{data}
+
+columnLoop
+    [Arguments]    ${i}
