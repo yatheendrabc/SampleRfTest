@@ -1,7 +1,28 @@
 *** Settings ***
-Resource          ../DataProviders/excel_Handling.txt
 Library           Selenium2Library
+Library           OperatingSystem
+Resource          ../GlobalConfigs/globalVariables.txt
+Resource          ../DataProviders/excel_Handling.txt
+Resource          ../Resources/LoginPageResources.txt
 
-*** Test Cases ***
-excelTest
-    @{data}=    getExcelRowValues    loginDetails    yathi
+*** Test cases ***
+First test selenium
+    [Setup]    suiteSetup
+    [Timeout]    30 seconds
+    loginToNovobankAs    yto
+    [Teardown]    suiteTearDown
+
+*** Keywords ***
+suiteSetup
+    Open browser    ${url}    ${browser}
+    Run Keyword And Ignore Error    Click Element    id=overridelink
+    Set Browser Implicit Wait    ${timeout}
+    Set Selenium Implicit Wait    ${timeout}
+    Set Selenium Timeout    ${timeout}
+    Maximize browser window
+
+suiteTearDown
+    Sleep    5
+    Capture Page Screenshot
+    logout
+    Close All Browsers

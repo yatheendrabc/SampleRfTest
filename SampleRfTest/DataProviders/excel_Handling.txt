@@ -2,15 +2,34 @@
 Library           ExcelLibrary
 Library           Collections
 
+*** Variables ***
+${excelFileName}    \webTestData.xls
+
 *** Keywords ***
-getExcelRowValues
+getExceData
     [Arguments]    ${sheetName}    ${unique_value}
-    Open Excel    ${CURDIR}${/}TestData.xls
+    Open Excel    ${CURDIR}\\${excelFileName}
     ${row_count}=    Get Row Count    ${sheetName}
-    : FOR    ${i}    IN RANGE    1    ${row_count}
-    \    ${value}=    Read Cell Data By Coordinates    ${sheetName}    0    ${i}
-    \    @{data}=    Get Row Values    ${sheetName}    ${i}    ${False}
-    [Return]    @{data}
+    : FOR    ${i}    IN RANGE    0    ${row_count}
+    \    ${values}    ${value}=    columnLoop    ${sheetName}    ${i}    ${unique_value}
+    \    Exit For Loop If    '${value}' == '${unique_value}'
+    [Return]    ${values}
 
 columnLoop
-    [Arguments]    ${i}
+    [Arguments]    ${sheetName}    ${i}    ${unique_value}
+    ${column_count}=    Get Column Count    ${sheetName}
+    : FOR    ${j}    IN RANGE    0    ${column_count}
+    \    ${value}=    Read Cell Data By Coordinates    ${sheetName}    ${j}    ${i}
+    \    ${data}=    Run Keyword If    '${value}' == '${unique_value}'    getRow    ${sheetName}    ${i}
+    \    Exit For Loop If    '${value}' == '${unique_value}'
+    [Return]    ${data}    ${value}
+
+getRow
+    [Arguments]    ${sheetName}    ${i}
+    ${column_count}=    Get Column Count    ${sheetName}
+    ${values}=    Create List
+    : FOR    ${j}    IN RANGE    0    ${column_count}
+    \    ${value}=    Read Cell Data By Coordinates    ${sheetName}    ${j}    ${i}
+    \    Log    ${value}
+    \    Append To List    ${values}    ${value}
+    [Return]    ${values}
