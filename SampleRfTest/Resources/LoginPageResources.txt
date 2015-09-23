@@ -1,0 +1,31 @@
+*** Settings ***
+Library           Selenium2Library
+Resource          ../GlobalConfigs/globalVariables.txt
+Library           Collections
+
+*** Variables ***
+${userName}       id=uid1
+${password}       id=pwd1
+${loginButton}    id=login-button
+${homepageHeader}    xpath=//h1
+${userMenu}       xpath=.//*[@id='bs-example-navbar-collapse-1']/ul[1]/li/a
+${logoutLink}     id=logout
+
+*** Keywords ***
+loginToNovobankAs
+    [Arguments]    ${user}
+    ${returned_data}=    getExceData    loginData    ${user}
+    Wait Until Page Contains Element    ${userName}    ${timeout}
+    ${uname}=    Get From List    ${returned_data}    1
+    Input Text    ${userName}    ${uname}
+    ${pass}=    Get From List    ${returned_data}    2
+    Input Password    ${password}    ${pass}
+    Click Button    ${loginButton}
+    Run Keyword And Ignore Error    Wait Until Page Contains Element    ${homepageHeader}    ${timeout}
+    Page Should Contain Element    ${homepageHeader}
+
+logout
+    Wait Until Page Contains Element    ${userMenu}    ${timeout}
+    Click Element    ${userMenu}
+    Click Element    ${logoutLink}
+    Sleep    5

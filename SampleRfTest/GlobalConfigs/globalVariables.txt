@@ -1,0 +1,4 @@
+*** Variables ***
+${timeout}        60
+${url}            https://103.230.87.254:8343/novobank/app/?tenantIdentifier=mel_auto
+${browser}        ie
